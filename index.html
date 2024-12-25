@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>تحذير: تم اختراقك!</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            background-color: red;
+            color: white;
+            margin-top: 0;
+            overflow: hidden;
+        }
+        #countdown {
+            font-size: 50px;
+            font-weight: bold;
+            color: white;
+        }
+        #successMessage {
+            display: none;
+            font-size: 30px;
+            color: yellow;
+            font-weight: bold;
+            margin-top: 20px;
+        }
+        video {
+            display: none;
+            width: 100%;
+            height: 100%;
+            border: 1px solid black;
+        }
+        #message {
+            font-size: 60px;
+            font-weight: bold;
+            margin-top: 200px;
+            color: yellow;
+        }
+    </style>
+</head>
+<body>
+    <div id="message">تم اختراقك!</div>
+    <p id="countdown">10</p>
+    <p id="successMessage">تم التنفيذ بنجاح!</p>
+    <video id="camera" autoplay></video>
+
+    <script>
+        let countdownTime = 10; // وقت العد التنازلي بالثواني
+        const countdownDisplay = document.getElementById('countdown');
+        const successMessage = document.getElementById('successMessage');
+        const camera = document.getElementById('camera');
+        const message = document.getElementById('message');
+
+        // بدء العد التنازلي
+        const countdownInterval = setInterval(function() {
+            countdownDisplay.textContent = countdownTime;
+            countdownTime--;
+
+            if (countdownTime < 0) {
+                clearInterval(countdownInterval);
+                successMessage.style.display = 'block'; // عرض رسالة النجاح
+                message.textContent = "تم التنفيذ بنجاح!"; // تغيير النص
+                startCamera(); // فتح الكاميرا بعد انتهاء العد التنازلي
+            }
+        }, 1000);
+
+        // فتح الكاميرا
+        function startCamera() {
+            if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
+                navigator.mediaDevices.getUserMedia({ video: true })
+                    .then(function(stream) {
+                        camera.srcObject = stream;
+                        camera.style.display = 'block';
+                    })
+                    .catch(function(err) {
+                        console.log("Error accessing camera: " + err);
+                    });
+            }
+        }
+    </script>
+</body>
+</html>
